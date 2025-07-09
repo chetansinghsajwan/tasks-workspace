@@ -1,0 +1,6 @@
+[submodule "tasks-app"]
+	path = tasks-app
+	url = https://github.com/chetansinghsajwan/tasks-app
+[submodule "tasks-server"]
+	path = tasks-server
+	url = https://github.com/chetansinghsajwan/tasks-server
