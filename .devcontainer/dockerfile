@@ -1,0 +1,34 @@
+ARG BASE_IMAGE="mcr.microsoft.com/vscode/devcontainers/base:ubuntu-20.04"
+ARG NODE_VERSION="24.4.0"
+ARG GO_VERSION="1.24.5"
+ARG WAILS_VERSION="2.10.2"
+ARG GOROOT="/usr/local/go"
+ARG GOPATH="/usr/local/gopath"
+
+FROM $BASE_IMAGE
+
+ARG NODE_VERSION
+ARG GO_VERSION
+ARG WAILS_VERSION
+ARG GOROOT
+ARG GOPATH
+
+# Install golang
+RUN mkdir -p $GOROOT \
+    && mkdir -p $GOPATH \
+    && wget "https://go.dev/dl/go$GO_VERSION.linux-amd64.tar.gz" \
+    && tar -xzf go$GO_VERSION.linux-amd64.tar.gz -C $GOROOT --strip-components=1 \
+    && rm go$GO_VERSION.linux-amd64.tar.gz
+
+ENV GOROOT=$GROOT \
+    GOPATH=$GOPATH \
+    PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
+
+# Install Node.js
+RUN wget "https://nodejs.org/download/release/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
+    && tar -xf node-v$NODE_VERSION-linux-x64.tar.xz -C /usr/local
+
+ENV PATH="/usr/local/node-v$NODE_VERSION-linux-x64/bin:${PATH}"
+
+# Install Wails CLI
+RUN go install "github.com/wailsapp/wails/v2/cmd/wails@v$WAILS_VERSION"
