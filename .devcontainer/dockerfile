@@ -1,17 +1,19 @@
-ARG BASE_IMAGE="mcr.microsoft.com/vscode/devcontainers/base:ubuntu-20.04"
+ARG BUILDPLATFORM="linux/amd64"
 ARG NODE_VERSION="24.4.0"
-ARG GO_VERSION="1.24.5"
-ARG WAILS_VERSION="2.10.2"
 ARG GOROOT="/usr/local/go"
 ARG GOPATH="/usr/local/gopath"
+ARG GO_VERSION="1.24.5"
+ARG WAILS_VERSION="2.10.2"
+ARG AIR_VERSION="1.62.0"
 
-FROM $BASE_IMAGE
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04
 
 ARG NODE_VERSION
-ARG GO_VERSION
-ARG WAILS_VERSION
 ARG GOROOT
 ARG GOPATH
+ARG GO_VERSION
+ARG WAILS_VERSION
+ARG AIR_VERSION
 
 # Install golang
 RUN mkdir -p $GOROOT \
@@ -20,7 +22,7 @@ RUN mkdir -p $GOROOT \
     && tar -xzf go$GO_VERSION.linux-amd64.tar.gz -C $GOROOT --strip-components=1 \
     && rm go$GO_VERSION.linux-amd64.tar.gz
 
-ENV GOROOT=$GROOT \
+ENV GOROOT=$GOROOT \
     GOPATH=$GOPATH \
     PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
 
@@ -29,6 +31,9 @@ RUN wget "https://nodejs.org/download/release/v$NODE_VERSION/node-v$NODE_VERSION
     && tar -xf node-v$NODE_VERSION-linux-x64.tar.xz -C /usr/local
 
 ENV PATH="/usr/local/node-v$NODE_VERSION-linux-x64/bin:${PATH}"
+
+# Install Air CLI
+RUN go install "github.com/air-verse/air@v$AIR_VERSION"
 
 # Install Wails CLI
 RUN go install "github.com/wailsapp/wails/v2/cmd/wails@v$WAILS_VERSION"
