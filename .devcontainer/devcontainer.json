@@ -1,6 +1,7 @@
 {
-  "build": {
-    "dockerfile": "dockerfile",
-    "context": ".."
-  }
+  "name": "tasks-workspace",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "workspace",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "root"
 }
