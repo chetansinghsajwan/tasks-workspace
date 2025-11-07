@@ -37,3 +37,10 @@ RUN go install "github.com/air-verse/air@v$AIR_VERSION"
 
 # Install Wails CLI
 RUN go install "github.com/wailsapp/wails/v2/cmd/wails@v$WAILS_VERSION"
+
+# Install postgres client
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends \
+    postgresql-client \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
